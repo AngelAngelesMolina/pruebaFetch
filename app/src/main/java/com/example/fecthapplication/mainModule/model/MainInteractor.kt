@@ -10,10 +10,11 @@ import com.android.volley.toolbox.JsonArrayRequest
 import com.example.fecthapplication.FetchApplication
 import com.example.fecthapplication.common.ItemEntity
 import com.example.fecthapplication.common.utils.Constants
+import java.util.concurrent.LinkedBlockingQueue
 
 
 class MainInteractor {
-//    val items: LiveData<MutableList<ItemEntity>> = liveData {
+    //    val items: LiveData<MutableList<ItemEntity>> = liveData {
 ////        kotlinx.coroutines.delay(1000) //temporal - pruebas
 //        val storesLiveData = getItems()
 //        emitSource(storesLiveData.map{ //map es para transformar la info
@@ -69,8 +70,12 @@ class MainInteractor {
                     itemList.add(item)
                 }
             }
-            Log.i("LIST", itemList.toString())
-            callback(itemList)
+//            Log.i("LIST", itemList.toString())
+//            val itemsOrdenados : MutableList<ItemEntity>= itemList.sortedBy { it.name }
+//            callback(itemList)
+            val itemsSorted = itemList.sortedWith(compareBy(ItemEntity::listId, ItemEntity::name))
+//            callback(itemList.sortedBy { it.name } as MutableList<ItemEntity>)
+            callback(itemsSorted as MutableList<ItemEntity>)
         }, {
             it.printStackTrace()
             callback(itemList)

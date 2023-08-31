@@ -52,9 +52,8 @@ class ItemAdapter(
             )
         }
     }
-
-    fun setItems(items: MutableList<ItemEntity>) {
-        this.items = items
+    fun setItems(items: List<ItemEntity>) {
+        this.items = items as MutableList<ItemEntity>
         notifyDataSetChanged()
     }
 }

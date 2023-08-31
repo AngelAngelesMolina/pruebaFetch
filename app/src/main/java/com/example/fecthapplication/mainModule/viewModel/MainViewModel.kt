@@ -8,34 +8,29 @@ import com.example.fecthapplication.common.utils.Constants
 import com.example.fecthapplication.mainModule.model.MainInteractor
 
 class MainViewModel : ViewModel() {
-    private var interactor: MainInteractor
+    private var interactor: MainInteractor = MainInteractor()
     private var itemList: MutableList<ItemEntity> //todo: delete
 //    private var stores:MutableLiveData<List<StoreEntity>>
 
     init { //intanciar o iniciar los elementos
-        interactor = MainInteractor()
         itemList = mutableListOf()
     }
+
     private val showProgress: MutableLiveData<Boolean> = MutableLiveData()
 
-    private val items: MutableLiveData<MutableList<ItemEntity>> by lazy {
-        MutableLiveData<MutableList<ItemEntity>>().also {
-            loadItems() //     DESCOMENTAR CON CORUTINES
-        }
-    } //se almacenaran las tiendas del modelo
-    fun getItems(): LiveData<MutableList<ItemEntity>> {
+    private val items: MutableLiveData<List<ItemEntity>> by lazy {
+        MutableLiveData<List<ItemEntity>>()
+    }
+
+    fun getItems(): LiveData<List<ItemEntity>> {
         //metodo que ocupa la vista para pintar las stores
         return items.also {
             //ejecuta otras instrucciones
-            loadItems()
+            loadAllItems()
         }
     }
 
-    fun isShowProgress(): LiveData<Boolean> {
-        return showProgress
-    }
-
-    private fun loadItems() {
+    private fun loadAllItems() {
         showProgress.value = Constants.SHOW
         interactor.getItemsAPI {
             showProgress.value = Constants.HIDE //esconder el progress
@@ -43,4 +38,22 @@ class MainViewModel : ViewModel() {
             itemList = it
         }
     }
+
+    fun isShowProgress(): LiveData<Boolean> {
+        return showProgress
+    }
+
+//    private fun updateCategories(position: Int) {
+//        categories[position].isSelected = !categories[position].isSelected;
+//        CategoryAdapter.notifyItemChanged(position);
+//        updateData();
+//    }
+//
+//    private fun updateData() {
+//        val selectedCategories: List<Category> = categories.filter { it.isSelected }
+//        val newTasks =
+//            tasks.filter { selectedCategories.contains(it.category) } //filtrar por categorias
+//        tasksAdapter.tasks = newTasks;
+//        tasksAdapter.notifyDataSetChanged();
+//    }
 }

@@ -45,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         mMainViewModel.getItems().observe(
             //watcher, cada que cambia se actualiza con ese metodo
             this,
-        ) { items ->
+        ) {items->
             mAdapter.setItems(items)
 //            mBinding.progressBar.visibility = if (stores.isEmpty()) View.VISIBLE else View.GONE
             //todo: validacion cuando viene vacio pero si hay respuesta
@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         mAdapterC = CategoryAdapter(categories)
+//        mAdapterC = CategoryAdapter(categories){ position -> updateCategories(position) }
         mLinearLayoutC = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         mAdapter = ItemAdapter(mutableListOf())
@@ -73,4 +74,16 @@ class MainActivity : AppCompatActivity() {
             adapter = mAdapter
         }
     }
+//    private fun updateCategories(position: Int) {
+//        categories[position].isSelected = !categories[position].isSelected;
+//        CategoryAdapter.notifyItemChanged(position);
+//        updateData();
+//    }
+//    private fun updateData() {
+//        val selectedCategories: List<Category> = categories.filter { it.isSelected }
+//        val newTasks =
+//            tasks.filter { selectedCategories.contains(it.category) } //filtrar por categorias
+//        tasksAdapter.tasks = newTasks;
+//        tasksAdapter.notifyDataSetChanged();
+//    }
 }
