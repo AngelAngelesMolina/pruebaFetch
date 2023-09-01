@@ -2,7 +2,6 @@ package com.example.fecthapplication.mainModule
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,7 +44,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupViewModel() {
         mMainViewModel = ViewModelProvider(this)[MainViewModel::class.java] //inicializarlo
         mMainViewModel.getItems().observe(
-            //watcher, cada que cambia se actualiza con ese metodo
             this,
         ) { items ->
             originalData = items
@@ -54,21 +52,10 @@ class MainActivity : AppCompatActivity() {
         mMainViewModel.isShowProgress().observe(this) { isShowProgress ->
             mBinding.progressBar.visibility = if (isShowProgress) View.VISIBLE else View.GONE
         }
-        mMainViewModel.filteredItems.observe(this) { newItems ->
-            mAdapter.setAllItems(newItems)
-//            taskAdapter.notifyDataSetChanged()
-        }
-//        mMainViewModel.categories = categories as MutableLiveData<List<Category>>
     }
 
     private fun setupRecyclerView() {
-//        mAdapterC = CategoryAdapter(categories)
-//        mAdapterC = CategoryAdapter(categories){ position ->
-//            mMainViewModel.onCategoryClicked(position)
-//        }
-//        mAdapterC = CategoryAdapter() { position -> mMainViewModel.updateCategories(mAdapterC ,position) }
-//        mAdapterC = CategoryAdapter(categories) { position -> updateCategories(position) }
-        mAdapterC = CategoryAdapter() { position -> updateCategories(position) } //buenooooooo
+        mAdapterC = CategoryAdapter() { position -> updateCategories(position) }
         mLinearLayoutC = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         mAdapter = ItemAdapter(mutableListOf())
@@ -108,31 +95,6 @@ class MainActivity : AppCompatActivity() {
                         Category.Cuatro -> item.listId == 4
                     }
                 }
-            }
-            mAdapter.setAllItems(newTasks)
-        }
-        mAdapter.notifyDataSetChanged()
-    }
-
-    private fun update2() {
-        val selectedCategories: List<Category> = categories.filter { it.isSelected }
-
-        if (selectedCategories.isEmpty()) {
-            mAdapter.setAllItems(originalData)
-        } else {
-            val selectedListIds = selectedCategories.mapNotNull { category ->
-                when (category) {
-                    Category.Uno -> 1
-                    Category.Dos -> 2
-                    Category.Tres -> 3
-                    Category.Cuatro -> 4
-                    // Agrega más casos para otras categorías si es necesario
-                    else -> null // Ignorar categorías desconocidas
-                }
-            }.toSet()
-
-            var newTasks = mAdapter.items.filter { item ->
-                selectedListIds.contains(item.listId)
             }
             mAdapter.setAllItems(newTasks)
         }

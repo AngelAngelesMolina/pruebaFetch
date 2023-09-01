@@ -6,13 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/fetch_background_app">
 
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:background="@color/fetch_background_app"-->
-    <!--        android:orientation="vertical"-->
-    <!--        tools:context=".todoapp.TodoActivity">-->
-
     <TextView
         android:id="@+id/tvWelcome"
         android:layout_width="wrap_content"
@@ -74,6 +67,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <!--    </LinearLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

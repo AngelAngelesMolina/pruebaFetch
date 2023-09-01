@@ -11,13 +11,10 @@ import com.example.fecthapplication.common.entities.Category
 import com.example.fecthapplication.databinding.ItemCategoryBinding
 
 class CategoryAdapter(
-//    val categories: List<Category>,
     private val onCategoryClickListener: (Int) -> Unit,
-//    private var selectedItemPosition: Int = RecyclerView.NO_POSITION
 ) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
-    private lateinit var mContext: Context // m-> se refiere a que esta variable es miembro de la clase
-//
+    private lateinit var mContext: Context
          var categories: List<Category> = listOf(
         Category.Uno, Category.Dos, Category.Tres, Category.Cuatro
     )
@@ -63,17 +60,6 @@ class CategoryAdapter(
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-//        val category = categories[position]
-
-//        holder.itemView.isSelected = position == selectedItemPosition
         holder.render(categories[position], onCategoryClickListener);
-
-//        holder.itemView.setOnClickListener {
-//            val previousSelectedItemPosition = selectedItemPosition
-//            selectedItemPosition = holder.adapterPosition
-//            notifyItemChanged(previousSelectedItemPosition)
-//            notifyItemChanged(selectedItemPosition)
-//            onCategoryClickListener(selectedItemPosition)
-//        }
     }
 }
