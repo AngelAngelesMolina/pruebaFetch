@@ -68,8 +68,8 @@ class MainActivity : AppCompatActivity() {
 //            mMainViewModel.onCategoryClicked(position)
 //        }
 //        mAdapterC = CategoryAdapter() { position -> mMainViewModel.updateCategories(mAdapterC ,position) }
-//        mAdapterC = CategoryAdapter(categories) { position -> updateCategories(position) } BUENO
-        mAdapterC = CategoryAdapter() { position -> updateCategories(position) }
+//        mAdapterC = CategoryAdapter(categories) { position -> updateCategories(position) }
+        mAdapterC = CategoryAdapter() { position -> updateCategories(position) } //buenooooooo
         mLinearLayoutC = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         mAdapter = ItemAdapter(mutableListOf())
@@ -88,14 +88,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateCategories(position: Int) {
-        categories[position].isSelected = !categories[position].isSelected;
+        mAdapterC.categories[position].isSelected = !mAdapterC.categories[position].isSelected;
         mAdapterC.notifyItemChanged(position);
         update();
     }
 
     private fun update() {
         val selectedCategories: List<Category> = categories.filter { it.isSelected }
-
         if (selectedCategories.isEmpty()) {
             // Si no hay categorías seleccionadas, restaura los datos originales
             mAdapter.setAllItems(originalData)
@@ -108,15 +107,14 @@ class MainActivity : AppCompatActivity() {
                         Category.Dos -> item.listId == 2
                         Category.Tres -> item.listId == 3
                         Category.Cuatro -> item.listId == 4
-                        // Agrega más casos para otras categorías si es necesario
                     }
                 }
             }
             mAdapter.setAllItems(newTasks)
         }
-
         mAdapter.notifyDataSetChanged()
     }
+
     private fun updateData2() {
         val selectedCategories: List<Category> = categories.filter { it.isSelected }
 
@@ -139,7 +137,6 @@ class MainActivity : AppCompatActivity() {
             }
             mAdapter.setAllItems(newTasks)
         }
-
         mAdapter.notifyDataSetChanged()
     }
 }

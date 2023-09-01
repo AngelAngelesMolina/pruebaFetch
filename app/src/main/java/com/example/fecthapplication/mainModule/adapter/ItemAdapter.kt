@@ -17,8 +17,6 @@ class ItemAdapter(
     var items: MutableList<ItemEntity>
 ) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
     private lateinit var mContext: Context // m-> se refiere a que esta variable es miembro de la clase
-    var itemsSorted: MutableList<ItemEntity> = mutableListOf()
-    val originalData: List<ItemEntity> = items.toList()
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ItemDataBinding.bind(view) //habilitar el viewbinding con los item del rv
     }
@@ -60,7 +58,6 @@ class ItemAdapter(
     }
 
     fun setAllItems(items: List<ItemEntity>) {
-//        this.items = items as MutableList<ItemEntity>
         this.items = items as MutableList<ItemEntity>
         notifyDataSetChanged()
     }
