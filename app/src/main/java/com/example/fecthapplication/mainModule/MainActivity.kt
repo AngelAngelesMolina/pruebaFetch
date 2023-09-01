@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fecthapplication.common.entities.Category
@@ -101,7 +100,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             val newTasks = mAdapter.items.filter { item ->
                 // Verifica si el item pertenece a todas las categorías seleccionadas
-                selectedCategories.all { category ->
+                selectedCategories.any { category ->
                     when (category) {
                         Category.Uno -> item.listId == 1
                         Category.Dos -> item.listId == 2
@@ -115,7 +114,7 @@ class MainActivity : AppCompatActivity() {
         mAdapter.notifyDataSetChanged()
     }
 
-    private fun updateData2() {
+    private fun update2() {
         val selectedCategories: List<Category> = categories.filter { it.isSelected }
 
         if (selectedCategories.isEmpty()) {
