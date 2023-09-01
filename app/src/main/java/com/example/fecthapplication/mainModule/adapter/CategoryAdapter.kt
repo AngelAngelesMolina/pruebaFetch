@@ -7,19 +7,50 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fecthapplication.R
-import com.example.fecthapplication.common.utils.Category
+import com.example.fecthapplication.common.entities.Category
 import com.example.fecthapplication.databinding.ItemCategoryBinding
 
 class CategoryAdapter(
-    private val categories: List<Category>
+    val categories: List<Category>,
+    private val onCategoryClickListener: (Int) -> Unit
+//    private val onCategoryClickListener: (Int) -> Unit
 //    private val onItemSelected: (Int) -> Unit
 ) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
     private lateinit var mContext: Context // m-> se refiere a que esta variable es miembro de la clase
 
+    //    private val categories: List<Category> = listOf(
+//        Category.Uno, Category.Dos, Category.Tres, Category.Cuatro
+//    )
     //VIEWHOLDER
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ItemCategoryBinding.bind(view) //habilitar el viewbinding con los item del rv
+        fun render(category: Category, onCategoryClickListener: (Int) -> Unit) {
+            val color = if (category.isSelected) {
+                R.color.fetch_background_card
+            } else {
+                R.color.fetch_background_disabled
+            }
+            binding.viewContainer.setCardBackgroundColor(
+                ContextCompat.getColor(
+                    binding.viewContainer.context,
+                    color
+                )
+            ) //asinar background
+            itemView.setOnClickListener {
+                onCategoryClickListener(layoutPosition) // obtener la posicion
+            }
+            val categoryName = binding.root.context.getString(R.string.category_name_format, category.value)
+            binding.tvCategoryName.text = categoryName
+
+            val dividerColor = when (category) {
+                Category.Uno -> R.color.group_color_one
+                Category.Dos -> R.color.group_color_two
+                Category.Tres -> R.color.group_color_three
+                Category.Cuatro -> R.color.group_color_four
+            }
+            binding.divider.setBackgroundColor(ContextCompat.getColor(binding.divider.context, dividerColor))
+        }
     }
 
     override fun getItemCount(): Int = categories.size
@@ -33,53 +64,6 @@ class CategoryAdapter(
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val color = if (categories[position].isSelected) {
-            R.color.fetch_background_card
-        } else {
-            R.color.fetch_background_disabled
-        }
-        holder.binding.viewContainer.setCardBackgroundColor(
-            ContextCompat.getColor(
-                mContext,
-                color
-            )
-        ) //asinar background
-//        holder.itemView.setOnClickListener {
-//            onItemSelected(holder.layoutPosition) // obtener la posicion
-//        }
-        when (categories[position]) {
-            Category.Cuatro -> {
-                holder.binding.tvCategoryName.text = "ListId: 4"
-                setColorDivider(holder, "group_color_four")
-            }
-
-            Category.Dos -> {
-                holder.binding.tvCategoryName.text = "ListId: 2"
-                setColorDivider(holder, "group_color_two")
-            }
-
-            Category.Tres -> {
-                holder.binding.tvCategoryName.text = "ListId: 3"
-                setColorDivider(holder, "group_color_three")
-            }
-
-            Category.Uno -> {
-                holder.binding.tvCategoryName.text = "ListId: 1"
-                setColorDivider(holder, "group_color_one")
-            }
-        }
-
-    }
-
-    private fun setColorDivider(holder: ViewHolder, color: String) {
-        val colorResourceId = mContext.resources.getIdentifier(color, "color", mContext.packageName)
-        if (colorResourceId != 0) {
-            holder.binding.divider.setBackgroundColor(
-                ContextCompat.getColor(
-                    mContext,
-                    colorResourceId
-                )
-            )
-        }
+        holder.render(categories[position], onCategoryClickListener);
     }
 }

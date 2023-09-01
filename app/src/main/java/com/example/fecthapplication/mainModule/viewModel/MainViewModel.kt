@@ -1,19 +1,31 @@
 package com.example.fecthapplication.mainModule.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.fecthapplication.common.ItemEntity
+import com.example.fecthapplication.common.entities.Category
+import com.example.fecthapplication.common.entities.ItemEntity
 import com.example.fecthapplication.common.utils.Constants
 import com.example.fecthapplication.mainModule.model.MainInteractor
 
 class MainViewModel : ViewModel() {
     private var interactor: MainInteractor = MainInteractor()
     private var itemList: MutableList<ItemEntity> //todo: delete
-//    private var stores:MutableLiveData<List<StoreEntity>>
+     var categories: MutableList<Category>
+     var categorias: MutableLiveData<List<Category>> = MutableLiveData()
+    var filteredItems: MutableLiveData<List<ItemEntity>> = MutableLiveData()
 
     init { //intanciar o iniciar los elementos
         itemList = mutableListOf()
+        categories = mutableListOf(Category.Uno,Category.Dos,Category.Tres,Category.Cuatro )
+        val initializedCategories = listOf(
+            Category.Uno,
+            Category.Dos,
+            Category.Tres,
+            Category.Cuatro
+        )
+        categorias.value = initializedCategories
     }
 
     private val showProgress: MutableLiveData<Boolean> = MutableLiveData()
@@ -30,6 +42,7 @@ class MainViewModel : ViewModel() {
         }
     }
 
+
     private fun loadAllItems() {
         showProgress.value = Constants.SHOW
         interactor.getItemsAPI {
@@ -43,17 +56,26 @@ class MainViewModel : ViewModel() {
         return showProgress
     }
 
-//    private fun updateCategories(position: Int) {
-//        categories[position].isSelected = !categories[position].isSelected;
-//        CategoryAdapter.notifyItemChanged(position);
-//        updateData();
-//    }
-//
-//    private fun updateData() {
-//        val selectedCategories: List<Category> = categories.filter { it.isSelected }
-//        val newTasks =
-//            tasks.filter { selectedCategories.contains(it.category) } //filtrar por categorias
-//        tasksAdapter.tasks = newTasks;
-//        tasksAdapter.notifyDataSetChanged();
-//    }
+    fun onCategoryClicked(position: Int) {
+    Log.i("Clickeado en categoria", categorias.value.toString())
+        val updatedCategories = categorias.value?.toMutableList()
+        updatedCategories?.apply {
+            this[position].isSelected = !this[position].isSelected
+            categorias.value = this
+        }
+        updateData()
+    }
+
+    // Función para filtrar tareas por categoría
+    private fun updateData() {
+        val selectedCategories = categorias.value?.filter { it.isSelected } ?: emptyList()
+        val newItems =
+            itemList.filter { item ->
+                selectedCategories.any {
+                    it.value == item.listId
+                }
+            }
+        filteredItems.value = newItems
+    }
+
 }

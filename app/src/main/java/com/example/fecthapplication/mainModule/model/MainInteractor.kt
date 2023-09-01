@@ -1,16 +1,10 @@
 package com.example.fecthapplication.mainModule.model
 
-import android.content.ClipData.Item
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.liveData
 import com.android.volley.Request
 import com.android.volley.toolbox.JsonArrayRequest
 import com.example.fecthapplication.FetchApplication
-import com.example.fecthapplication.common.ItemEntity
+import com.example.fecthapplication.common.entities.ItemEntity
 import com.example.fecthapplication.common.utils.Constants
-import java.util.concurrent.LinkedBlockingQueue
 
 
 class MainInteractor {

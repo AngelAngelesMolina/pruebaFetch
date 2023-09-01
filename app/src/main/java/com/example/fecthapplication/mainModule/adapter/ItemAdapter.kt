@@ -7,11 +7,12 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fecthapplication.R
-import com.example.fecthapplication.common.ItemEntity
+import com.example.fecthapplication.common.entities.ItemEntity
 import com.example.fecthapplication.databinding.ItemDataBinding
 
 class ItemAdapter(
-    private var items: MutableList<ItemEntity>
+//    private var items: MutableList<ItemEntity>
+     var items: MutableList<ItemEntity>
 ) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
     private lateinit var mContext: Context // m-> se refiere a que esta variable es miembro de la clase
 
@@ -52,7 +53,7 @@ class ItemAdapter(
             )
         }
     }
-    fun setItems(items: List<ItemEntity>) {
+    fun setAllItems(items: List<ItemEntity>) {
         this.items = items as MutableList<ItemEntity>
         notifyDataSetChanged()
     }

@@ -1,4 +1,4 @@
-package com.example.fecthapplication.common
+package com.example.fecthapplication.common.entities
 
 class ItemEntity(
     var id: Int,
