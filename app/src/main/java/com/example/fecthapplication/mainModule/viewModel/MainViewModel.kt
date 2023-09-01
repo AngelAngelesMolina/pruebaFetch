@@ -4,9 +4,12 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.RecyclerView.Adapter
 import com.example.fecthapplication.common.entities.Category
 import com.example.fecthapplication.common.entities.ItemEntity
 import com.example.fecthapplication.common.utils.Constants
+import com.example.fecthapplication.mainModule.adapter.CategoryAdapter
+import com.example.fecthapplication.mainModule.adapter.ItemAdapter
 import com.example.fecthapplication.mainModule.model.MainInteractor
 
 class MainViewModel : ViewModel() {
@@ -19,13 +22,13 @@ class MainViewModel : ViewModel() {
     init { //intanciar o iniciar los elementos
         itemList = mutableListOf()
         categories = mutableListOf(Category.Uno,Category.Dos,Category.Tres,Category.Cuatro )
-        val initializedCategories = listOf(
-            Category.Uno,
-            Category.Dos,
-            Category.Tres,
-            Category.Cuatro
-        )
-        categorias.value = initializedCategories
+//        val initializedCategories = listOf(
+//            Category.Uno,
+//            Category.Dos,
+//            Category.Tres,
+//            Category.Cuatro
+//        )
+//        categorias.value = initializedCategories
     }
 
     private val showProgress: MutableLiveData<Boolean> = MutableLiveData()
@@ -33,7 +36,29 @@ class MainViewModel : ViewModel() {
     private val items: MutableLiveData<List<ItemEntity>> by lazy {
         MutableLiveData<List<ItemEntity>>()
     }
-
+     fun updateCategories(adapterC:Adapter<CategoryAdapter.ViewHolder>, position: Int) {
+        categories[position].isSelected = !categories[position].isSelected;
+        adapterC.notifyItemChanged(position);
+//        updateDatos();
+    }
+//    private fun updateDatos() {
+//        val selectedCategories: List<Category> = categories.filter { it.isSelected }
+//        val newTasks =
+//            mAdapter.items.filter {item->
+//                selectedCategories.any { category ->
+////                    it.value == item.listId
+//                    when (category) {
+//                        Category.Uno -> item.listId == 1
+//                        Category.Dos -> item.listId == 2
+//                        Category.Tres -> item.listId == 3
+//                        Category.Cuatro -> item.listId == 4
+//                    }
+//                }
+//            }
+//        mAdapter.setAllItems(newTasks)
+////        mAdapter.itemsSorted = newTasks as MutableList<ItemEntity>
+//        mAdapter.notifyDataSetChanged()
+//    }
     fun getItems(): LiveData<List<ItemEntity>> {
         //metodo que ocupa la vista para pintar las stores
         return items.also {

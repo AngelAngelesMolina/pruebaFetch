@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fecthapplication.common.entities.Category
+import com.example.fecthapplication.common.entities.ItemEntity
 import com.example.fecthapplication.databinding.ActivityMainBinding
 import com.example.fecthapplication.mainModule.adapter.CategoryAdapter
 import com.example.fecthapplication.mainModule.adapter.ItemAdapter
@@ -33,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     //MVVM
     private lateinit var mMainViewModel: MainViewModel
-
+    var originalData: List<ItemEntity> = listOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -48,6 +49,7 @@ class MainActivity : AppCompatActivity() {
             //watcher, cada que cambia se actualiza con ese metodo
             this,
         ) { items ->
+            originalData = items
             mAdapter.setAllItems(items)
         }
         mMainViewModel.isShowProgress().observe(this) { isShowProgress ->
@@ -65,7 +67,9 @@ class MainActivity : AppCompatActivity() {
 //        mAdapterC = CategoryAdapter(categories){ position ->
 //            mMainViewModel.onCategoryClicked(position)
 //        }
-        mAdapterC = CategoryAdapter(categories) { position -> updateCategories(position) }
+//        mAdapterC = CategoryAdapter() { position -> mMainViewModel.updateCategories(mAdapterC ,position) }
+//        mAdapterC = CategoryAdapter(categories) { position -> updateCategories(position) } BUENO
+        mAdapterC = CategoryAdapter() { position -> updateCategories(position) }
         mLinearLayoutC = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
         mAdapter = ItemAdapter(mutableListOf())
@@ -86,30 +90,56 @@ class MainActivity : AppCompatActivity() {
     private fun updateCategories(position: Int) {
         categories[position].isSelected = !categories[position].isSelected;
         mAdapterC.notifyItemChanged(position);
-        updateDatos();
+        update();
     }
 
-    private fun updateDatos() {
+    private fun update() {
         val selectedCategories: List<Category> = categories.filter { it.isSelected }
-        val newTasks =
-            mAdapter.items.filter {item->
-                selectedCategories.any { category ->
-//                    it.value == item.listId
+
+        if (selectedCategories.isEmpty()) {
+            // Si no hay categorías seleccionadas, restaura los datos originales
+            mAdapter.setAllItems(originalData)
+        } else {
+            val newTasks = mAdapter.items.filter { item ->
+                // Verifica si el item pertenece a todas las categorías seleccionadas
+                selectedCategories.all { category ->
                     when (category) {
                         Category.Uno -> item.listId == 1
                         Category.Dos -> item.listId == 2
                         Category.Tres -> item.listId == 3
                         Category.Cuatro -> item.listId == 4
+                        // Agrega más casos para otras categorías si es necesario
                     }
-//                    when (category.value) {
-//                        1 -> item.listId == 1
-//                        2 -> item.listId == 2
-//                        3 -> item.listId == 3
-//                        4 -> item.listId == 4
-//                    }
                 }
             }
-        mAdapter.setAllItems(newTasks)
+            mAdapter.setAllItems(newTasks)
+        }
+
+        mAdapter.notifyDataSetChanged()
+    }
+    private fun updateData2() {
+        val selectedCategories: List<Category> = categories.filter { it.isSelected }
+
+        if (selectedCategories.isEmpty()) {
+            mAdapter.setAllItems(originalData)
+        } else {
+            val selectedListIds = selectedCategories.mapNotNull { category ->
+                when (category) {
+                    Category.Uno -> 1
+                    Category.Dos -> 2
+                    Category.Tres -> 3
+                    Category.Cuatro -> 4
+                    // Agrega más casos para otras categorías si es necesario
+                    else -> null // Ignorar categorías desconocidas
+                }
+            }.toSet()
+
+            var newTasks = mAdapter.items.filter { item ->
+                selectedListIds.contains(item.listId)
+            }
+            mAdapter.setAllItems(newTasks)
+        }
+
         mAdapter.notifyDataSetChanged()
     }
 }

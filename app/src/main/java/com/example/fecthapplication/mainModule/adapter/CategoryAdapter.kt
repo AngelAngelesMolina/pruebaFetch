@@ -11,17 +11,15 @@ import com.example.fecthapplication.common.entities.Category
 import com.example.fecthapplication.databinding.ItemCategoryBinding
 
 class CategoryAdapter(
-    val categories: List<Category>,
+//    val categories: List<Category>,
     private val onCategoryClickListener: (Int) -> Unit
-//    private val onCategoryClickListener: (Int) -> Unit
-//    private val onItemSelected: (Int) -> Unit
 ) :
     RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
     private lateinit var mContext: Context // m-> se refiere a que esta variable es miembro de la clase
 
-    //    private val categories: List<Category> = listOf(
-//        Category.Uno, Category.Dos, Category.Tres, Category.Cuatro
-//    )
+        private val categories: List<Category> = listOf(
+        Category.Uno, Category.Dos, Category.Tres, Category.Cuatro
+    )
     //VIEWHOLDER
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ItemCategoryBinding.bind(view) //habilitar el viewbinding con los item del rv

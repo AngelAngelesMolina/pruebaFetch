@@ -1,5 +1,6 @@
 package com.example.fecthapplication.mainModule.adapter
 
+import android.content.ClipData.Item
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -12,16 +13,19 @@ import com.example.fecthapplication.databinding.ItemDataBinding
 
 class ItemAdapter(
 //    private var items: MutableList<ItemEntity>
-     var items: MutableList<ItemEntity>
+//     var items: MutableList<ItemEntity>
+    var items: MutableList<ItemEntity>
 ) : RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
     private lateinit var mContext: Context // m-> se refiere a que esta variable es miembro de la clase
-
+    var itemsSorted: MutableList<ItemEntity> = mutableListOf()
+    val originalData: List<ItemEntity> = items.toList()
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val binding = ItemDataBinding.bind(view) //habilitar el viewbinding con los item del rv
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         mContext = parent.context
+//        itemsSorted = items
         val view = LayoutInflater.from(mContext).inflate(R.layout.item_data, parent, false)
         return ViewHolder(view)
     }
@@ -30,6 +34,7 @@ class ItemAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
+//        val item = itemsSorted[position]
         with(holder) {
             binding.tvId.text = "ID: " + item.id.toString()
             binding.tvName.text = "Nombre: " + item.name
@@ -53,7 +58,9 @@ class ItemAdapter(
             )
         }
     }
+
     fun setAllItems(items: List<ItemEntity>) {
+//        this.items = items as MutableList<ItemEntity>
         this.items = items as MutableList<ItemEntity>
         notifyDataSetChanged()
     }
